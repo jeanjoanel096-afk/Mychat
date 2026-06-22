@@ -1,74 +1,69 @@
 <!DOCTYPE html>
-<html lang="ht">
+<html lang="ht" class="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Mychat Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyChat App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; background: #eef2f3; text-align: center; padding: 20px; }
-        .card { background: white; max-width: 400px; margin: 10px auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        input, button { width: 90%; margin: 5px 0; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-        img { width: 100px; margin: 5px; border-radius: 10px; }
-        .tab { display: none; }
-        .active { display: block; }
-        .nav-btn { background: #007bff; color: white; border: none; cursor: pointer; width: 45%; }
+        .game-card-bg { background-color: #5d6dbe; }
     </style>
 </head>
-<body>
+<body class="bg-gray-950 text-white font-sans p-4">
 
-    <div class="card">
-        <button class="nav-btn" onclick="showTab('dashboard')">Dashboard</button>
-        <button class="nav-btn" onclick="showTab('chat')">Chat</button>
+    <!-- SIGN UP SCREEN -->
+    <div id="signup-screen" class="fixed inset-0 bg-gray-950 z-50 flex flex-col justify-center p-6">
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-500">Byenveni nan MyChat</h1>
+        <input type="text" placeholder="Non Itilizatè" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
+        <input type="email" placeholder="Imel" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
+        <input type="password" placeholder="Modpas" class="w-full p-6 mb-6 bg-gray-800 rounded-xl border border-gray-700">
+        <button class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl">Enskri Koulye a</button>
     </div>
 
-    <div id="dashboard" class="tab active" class="card">
-        <div class="card">
-            <h2>Dashboard</h2>
-            <p>Balans ou: <strong id="balans">110</strong></p>
-            <input type="text" id="status-input" placeholder="Chanje estati w...">
-            <button onclick="changeStatus()">Chanje Estati</button>
-            <p>Estati w: <span id="user-status">Aktif</span></p>
+    <!-- MAIN DASHBOARD -->
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-6">MyChat Dashboard</h1>
+        
+        <!-- Search User -->
+        <div class="relative mb-6">
+            <input type="text" placeholder="Chèche yon itilizatè..." class="w-full p-3 pl-10 bg-gray-800 rounded-full border border-gray-700">
+            <i class="fas fa-search absolute left-4 top-4 text-gray-500"></i>
+        </div>
+
+        <!-- Games Section -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="game-card-bg p-6 rounded-3xl text-center shadow-lg border border-indigo-400">
+                <i class="fas fa-th-large text-4xl mb-3"></i>
+                <p class="font-bold">Block Puzzle</p>
+                <button class="mt-4 bg-black/20 px-4 py-2 rounded-full text-xs">Jwe</button>
+            </div>
+            <div class="bg-orange-600 p-6 rounded-3xl text-center shadow-lg">
+                <i class="fas fa-motorcycle text-4xl mb-3"></i>
+                <p class="font-bold">Jeux Moto</p>
+                <button class="mt-4 bg-black/20 px-4 py-2 rounded-full text-xs">Jwe</button>
+            </div>
+        </div>
+
+        <!-- Withdraw & Support -->
+        <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+            <h3 class="text-blue-500 font-bold mb-4">Retrè (Min: 10$)</h3>
+            <p class="text-sm text-gray-400 mb-4">Chak 25 pwen = 1$.</p>
+            <input type="text" placeholder="Nimewo MonCash" class="w-full p-3 bg-gray-800 rounded-lg mb-3">
+            <button class="w-full bg-green-600 py-3 rounded-lg font-bold">Mande Retrè</button>
+            
+            <div class="mt-6 pt-6 border-t border-gray-800 text-center">
+                <p class="text-gray-500 text-sm">Support MyChat:</p>
+                <a href="tel:50935250313" class="text-xl font-bold text-blue-400">509 35250313</a>
+            </div>
         </div>
     </div>
 
-    <div id="chat" class="tab" class="card">
-        <div class="card">
-            <h2>Chat Feed</h2>
-            <input type="file" id="fileInput">
-            <button onclick="voyeFoto()">Voye Foto</button>
-            <div id="photo-container"></div>
-        </div>
+    <!-- Chat Feature -->
+    <div class="fixed bottom-4 right-4 flex flex-col gap-2">
+        <button class="bg-purple-600 p-4 rounded-full shadow-lg"><i class="fas fa-image"></i></button>
+        <button class="bg-blue-600 p-4 rounded-full shadow-lg"><i class="fas fa-comment"></i></button>
     </div>
 
-    <script>
-        // Fonksyon pou chanje tab
-        function showTab(tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        function changeStatus() {
-            let s = document.getElementById('status-input').value;
-            if(s) document.getElementById('user-status').innerText = s;
-        }
-
-        function voyeFoto() {
-            let f = document.getElementById('fileInput').files[0];
-            let formData = new FormData();
-            formData.append('photo', f);
-            fetch('/upload-photo', { method: 'POST', body: formData })
-            .then(res => res.json())
-            .then(data => { if(data.success) alert("Foto a voye!"); });
-        }
-
-        // Mizajou foto yo chak 3 segonn
-        setInterval(() => {
-            fetch('/get-data')
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('photo-container').innerHTML = 
-                    data.photos.map(p => `<img src="/static/uploads/${p}">`).join('');
-            });
-        }, 3000);
-    </script>
 </body>
 </html>
