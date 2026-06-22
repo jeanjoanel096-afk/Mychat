@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-# Baz done nan memwa sèvè a kote imel yo pral sèvi kòm idantifyan inik
+# Baz done nan memwa sèvè a
 users_db = {}
 
-# Nou ka toujou kite yon kont tès si n vle, men kounye a moun ka enskri pou kont yo
+# Kont tès pou sekirite
 users_db["test@gmail.com"] = {
     "username": "testuser",
     "password": "123", 
@@ -17,8 +17,9 @@ users_db["test@gmail.com"] = {
 
 @app.route('/')
 def home():
-    # Kounye a paj la ap louvri tou senp, se JavaScript lan k ap jere afichaj paj login lan an premye
-    return render_template('index.html')
+    # Nou pase yon ti donte fiktif vid pou HTML la pa fè erè lè l ap chaje an premye
+    empty_user = {"pwen": 0, "moncash": "", "lang": "ht", "tèm": "dark"}
+    return render_template('index.html', user=empty_user, username="")
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -30,16 +31,13 @@ def register():
     if not email or not password or not username:
         return jsonify({"success": False, "message": "Tanpri ranpli tout espas yo!"})
 
-    # Tcheke si imel la deja itilize
     if email in users_db:
-        return jsonify({"success": False, "message": "Imel sa a gen yon kont sou li deja!"})
+        return jsonify({"success": False, "message": "Imel sa a deja gen yon kont!"})
 
-    # Tcheke si non itilizatè a deja pran
     for u in users_db.values():
         if u['username'].lower() == username.lower():
             return jsonify({"success": False, "message": "Non itilizatè sa a deja pran!"})
 
-    # Anrejistre nouvo itilizatè a
     users_db[email] = {
         "username": username,
         "password": password,
@@ -49,13 +47,7 @@ def register():
         "tèm": "dark"
     }
 
-    return jsonify({
-        "success": True,
-        "username": username,
-        "pwen": 0,
-        "moncash": "",
-        "message": "Kont ou kreye ak siksè!"
-    })
+    return jsonify({"success": True, "username": username, "message": "Kont ou kreye ak siksè!"})
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -70,7 +62,7 @@ def login():
             "username": user_info['username'],
             "pwen": user_info['pwen'],
             "moncash": user_info['moncash'],
-            "message": f"Byenvini ankò @{user_info['username']}!"
+            "message": "Byenvini ankò!"
         })
     
     return jsonify({"success": False, "message": "Imel oswa modpas la pa kòrèk!"})
@@ -79,17 +71,10 @@ def login():
 def gade_piblisite():
     data = request.json
     username = data.get('username')
-
-    # Chèche itilizatè a nan baz done a pa non l
     for email, user_info in users_db.items():
         if user_info['username'] == username:
             user_info['pwen'] += 10
-            return jsonify({
-                "success": True, 
-                "message": "Ou gade piblisite a! +10 Pwen", 
-                "nouvo_balans": user_info['pwen']
-            })
-            
+            return jsonify({"success": True, "message": "+10 Pwen!", "nouvo_balans": user_info['pwen']})
     return jsonify({"success": False, "message": "Itilizatè pa jwenn"}), 404
 
 @app.route('/withdrawal', methods=['POST'])
@@ -97,42 +82,25 @@ def withdrawal():
     data = request.json
     username = data.get('username')
     pwen_pou_retire = int(data.get('pwen', 0))
-
     for email, user_info in users_db.items():
         if user_info['username'] == username:
-            current_pwen = user_info['pwen']
-            # Chanje a 200 pwen pou limit la match ak HTML la
-            if current_pwen >= pwen_pou_retire and pwen_pou_retire >= 200:
+            if user_info['pwen'] >= pwen_pou_retire and pwen_pou_retire >= 200:
                 user_info['pwen'] -= pwen_pou_retire
-                return jsonify({
-                    "success": True, 
-                    "message": f"Demann retrè de {pwen_pou_retire} pwen voye sou MonCash avèk siksè!", 
-                    "nouvo_balans": user_info['pwen']
-                })
-            elif pwen_pou_retire < 200:
-                return jsonify({"success": False, "message": "Fòk ou gen omwen 200 pwen pou w fè yon retrè."})
-            else:
-                return jsonify({"success": False, "message": "Pwen ou yo pa ase."})
-
+                return jsonify({"success": True, "message": "Demann voye!", "nouvo_balans": user_info['pwen']})
+            return jsonify({"success": False, "message": "Fòk ou gen omwen 200 pwen."})
     return jsonify({"success": False, "message": "Itilizatè pa jwenn"}), 404
 
 @app.route('/update-settings', methods=['POST'])
 def update_settings():
     data = request.json
     username = data.get('username')
-    lang = data.get('lang')
-    tèm = data.get('tèm')
-    moncash = data.get('moncash')
-
     for email, user_info in users_db.items():
         if user_info['username'] == username:
-            if lang: user_info['lang'] = lang
-            if tèm: user_info['tèm'] = tèm
-            if moncash: user_info['moncash'] = moncash
+            if data.get('lang'): user_info['lang'] = data.get('lang')
+            if data.get('tèm'): user_info['tèm'] = data.get('tèm')
+            if data.get('moncash'): user_info['moncash'] = data.get('moncash')
             return jsonify({"success": True, "message": "Reglaj yo ajou!"})
-
     return jsonify({"success": False, "message": "Erè nan mizajou"})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
