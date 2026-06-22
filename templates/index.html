@@ -2,38 +2,65 @@
 <html lang="ht" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyChat App</title>
+    <title>MyChat</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-950 text-white font-sans p-4">
+<body class="bg-gray-950 text-white font-sans pb-20">
 
     <div id="signup-screen" class="fixed inset-0 bg-gray-950 z-50 flex flex-col justify-center p-6">
-        <h1 class="text-3xl font-bold mb-6 text-center text-blue-500">MyChat Sign Up</h1>
-        <input type="text" id="username" placeholder="Non Itilizatè" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
-        <input type="email" id="email" placeholder="Imel" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
-        <input type="password" id="password" placeholder="Modpas" class="w-full p-6 mb-6 bg-gray-800 rounded-xl border border-gray-700">
-        <button id="signup-btn" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl">Enskri Koulye a</button>
+        <h1 class="text-3xl font-bold text-center text-blue-500 mb-8">MyChat</h1>
+        <input type="text" id="username" placeholder="Non Itilizatè" class="w-full p-4 mb-4 bg-gray-800 rounded-xl">
+        <button id="signup-btn" class="w-full bg-blue-600 py-4 rounded-xl font-bold">Enskri</button>
     </div>
 
-    <div class="max-w-md mx-auto">
-        <h1 class="text-2xl font-bold">MyChat Dashboard</h1>
+    <div id="app-content" style="display: none;">
+        
+        <div id="tab-dashboard" class="p-4">
+            <h2 class="text-xl font-bold mb-4">Dashboard</h2>
+            <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+                <p class="text-sm text-gray-400">Pousantaj: 100 pwen = 1$.</p>
+                <button class="w-full bg-green-600 py-3 rounded-lg font-bold mt-4">Mande Retrè</button>
+            </div>
+        </div>
+
+        <div id="tab-status" class="p-4 hidden">
+            <h2 class="text-xl font-bold mb-4">Status</h2>
+            <div class="bg-gray-800 p-4 rounded-xl flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full border-2 border-blue-500 flex items-center justify-center">+</div>
+                <p>Ajoute yon nouvo status...</p>
+            </div>
+        </div>
+
+        <div id="tab-chat" class="p-4 hidden">
+            <h2 class="text-xl font-bold mb-4">Chat</h2>
+            <div class="space-y-4">
+                <input type="text" placeholder="Chèche moun..." class="w-full p-3 bg-gray-800 rounded-full mb-4">
+                <button class="bg-purple-600 px-4 py-2 rounded-lg text-sm"><i class="fas fa-image mr-2"></i>Voye Foto</button>
+            </div>
+        </div>
+
+        <nav class="fixed bottom-0 w-full bg-gray-900 border-t border-gray-800 flex justify-around p-4">
+            <button onclick="showTab('dashboard')" class="text-blue-500">Dashboard</button>
+            <button onclick="showTab('status')" class="text-gray-400">Status</button>
+            <button onclick="showTab('chat')" class="text-gray-400">Chat</button>
+        </nav>
     </div>
 
     <script>
-        document.getElementById('signup-btn').addEventListener('click', function() {
-            console.log("Bouton an klike!"); // Si ou wè sa nan console, script la mache
-            const user = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-
-            if(user !== "" && email !== "" && pass !== "") {
-                alert('Mèsi ' + user + '! Kont ou an anrejistre.');
-                document.getElementById('signup-screen').style.display = 'none';
-            } else {
-                alert('Tanpri ranpli tout bwat yo!');
-            }
+        // Lojik Sign Up
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            document.getElementById('signup-screen').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
         });
+
+        // Lojik Tab
+        function showTab(tabName) {
+            document.getElementById('tab-dashboard').classList.add('hidden');
+            document.getElementById('tab-status').classList.add('hidden');
+            document.getElementById('tab-chat').classList.add('hidden');
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
