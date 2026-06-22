@@ -12,4 +12,18 @@
     </div>
 </body>
 </html>
-<button onclick="ajePwen()">Gade Videyo (+10 Pwen)</button>
+<button onclick="ajePwen()">Gade Videyo (+10 Pwen)</button><script>
+function ajePwen() {
+    fetch('/gade-piblisite', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ username: "ProUser" })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            document.getElementById('pwen-valeur').innerText = data.nouvo_balans;
+        }
+    });
+}
+</script>
