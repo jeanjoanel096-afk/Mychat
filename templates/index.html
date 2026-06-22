@@ -5,82 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyChat App</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .game-card-bg { background-color: #5d6dbe; }
-    </style>
 </head>
 <body class="bg-gray-950 text-white font-sans p-4">
 
-    <!-- SIGN UP SCREEN -->
     <div id="signup-screen" class="fixed inset-0 bg-gray-950 z-50 flex flex-col justify-center p-6">
-        <h1 class="text-3xl font-bold mb-6 text-center text-blue-500">Byenveni nan MyChat</h1>
-        <input type="text" placeholder="Non Itilizatè" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
-        <input type="email" placeholder="Imel" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
-        <input type="password" placeholder="Modpas" class="w-full p-6 mb-6 bg-gray-800 rounded-xl border border-gray-700">
-        <button class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl">Enskri Koulye a</button>
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-500">MyChat Sign Up</h1>
+        <input type="text" id="username" placeholder="Non Itilizatè" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
+        <input type="email" id="email" placeholder="Imel" class="w-full p-4 mb-4 bg-gray-800 rounded-xl border border-gray-700">
+        <input type="password" id="password" placeholder="Modpas" class="w-full p-6 mb-6 bg-gray-800 rounded-xl border border-gray-700">
+        <button id="signup-btn" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl">Enskri Koulye a</button>
     </div>
 
-    <!-- MAIN DASHBOARD -->
     <div class="max-w-md mx-auto">
-        <h1 class="text-2xl font-bold mb-6">MyChat Dashboard</h1>
-        
-        <!-- Search User -->
-        <div class="relative mb-6">
-            <input type="text" placeholder="Chèche yon itilizatè..." class="w-full p-3 pl-10 bg-gray-800 rounded-full border border-gray-700">
-            <i class="fas fa-search absolute left-4 top-4 text-gray-500"></i>
-        </div>
-
-        <!-- Games Section -->
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="game-card-bg p-6 rounded-3xl text-center shadow-lg border border-indigo-400">
-                <i class="fas fa-th-large text-4xl mb-3"></i>
-                <p class="font-bold">Block Puzzle</p>
-                <button class="mt-4 bg-black/20 px-4 py-2 rounded-full text-xs">Jwe</button>
-            </div>
-            <div class="bg-orange-600 p-6 rounded-3xl text-center shadow-lg">
-                <i class="fas fa-motorcycle text-4xl mb-3"></i>
-                <p class="font-bold">Jeux Moto</p>
-                <button class="mt-4 bg-black/20 px-4 py-2 rounded-full text-xs">Jwe</button>
-            </div>
-        </div>
-
-        <!-- Withdraw & Support -->
-        <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-            <h3 class="text-blue-500 font-bold mb-4">Retrè (Min: 10$)</h3>
-            <p class="text-sm text-gray-400 mb-4">Chak 25 pwen = 1$.</p>
-            <input type="text" placeholder="Nimewo MonCash" class="w-full p-3 bg-gray-800 rounded-lg mb-3">
-            <button class="w-full bg-green-600 py-3 rounded-lg font-bold">Mande Retrè</button>
-            
-            <div class="mt-6 pt-6 border-t border-gray-800 text-center">
-                <p class="text-gray-500 text-sm">Support MyChat:</p>
-                <a href="tel:50935250313" class="text-xl font-bold text-blue-400">509 35250313</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Chat Feature -->
-    <div class="fixed bottom-4 right-4 flex flex-col gap-2">
-        <button class="bg-purple-600 p-4 rounded-full shadow-lg"><i class="fas fa-image"></i></button>
-        <button class="bg-blue-600 p-4 rounded-full shadow-lg"><i class="fas fa-comment"></i></button>
-    </div>
-<div class="fixed bottom-4 right-4 flex flex-col gap-2">
-        <button class="bg-purple-600 p-4 rounded-full shadow-lg"><i class="fas fa-image"></i></button>
-        <button class="bg-blue-600 p-4 rounded-full shadow-lg"><i class="fas fa-comment"></i></button>
+        <h1 class="text-2xl font-bold">MyChat Dashboard</h1>
     </div>
 
     <script>
-        document.querySelector('#signup-screen button').addEventListener('click', function() {
-            const inputs = document.querySelectorAll('#signup-screen input');
-            if(inputs[0].value !== "" && inputs[1].value !== "") {
-                alert('Mèsi ' + inputs[0].value + '! Kont ou an anrejistre.');
+        document.getElementById('signup-btn').addEventListener('click', function() {
+            console.log("Bouton an klike!"); // Si ou wè sa nan console, script la mache
+            const user = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            if(user !== "" && email !== "" && pass !== "") {
+                alert('Mèsi ' + user + '! Kont ou an anrejistre.');
                 document.getElementById('signup-screen').style.display = 'none';
             } else {
                 alert('Tanpri ranpli tout bwat yo!');
             }
         });
     </script>
-</body>
-</html>
 </body>
 </html>
