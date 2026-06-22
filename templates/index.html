@@ -3,27 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>Mychat Pro</title>
+    <style>
+        body { font-family: sans-serif; background: #eef2f3; text-align: center; padding: 20px; }
+        .card { background: white; max-width: 400px; margin: 10px auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        input, button { width: 90%; margin: 5px 0; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        img { width: 100px; margin: 5px; border-radius: 10px; }
+        .tab { display: none; }
+        .active { display: block; }
+        .nav-btn { background: #007bff; color: white; border: none; cursor: pointer; width: 45%; }
+    </style>
 </head>
 <body>
-    <h1>Byenvini sou Mychat Pro!</h1>
-    <div id="app-container">
-        <p>Kont ou ap mache byen!</p>
-        <div id="pwen-box">Pwen ou: <span id="pwen-valeur">0</span></div>
+
+    <div class="card">
+        <button class="nav-btn" onclick="showTab('dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="showTab('chat')">Chat</button>
     </div>
+
+    <div id="dashboard" class="tab active" class="card">
+        <div class="card">
+            <h2>Dashboard</h2>
+            <p>Balans ou: <strong id="balans">110</strong></p>
+            <input type="text" id="status-input" placeholder="Chanje estati w...">
+            <button onclick="changeStatus()">Chanje Estati</button>
+            <p>Estati w: <span id="user-status">Aktif</span></p>
+        </div>
+    </div>
+
+    <div id="chat" class="tab" class="card">
+        <div class="card">
+            <h2>Chat Feed</h2>
+            <input type="file" id="fileInput">
+            <button onclick="voyeFoto()">Voye Foto</button>
+            <div id="photo-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // Fonksyon pou chanje tab
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function changeStatus() {
+            let s = document.getElementById('status-input').value;
+            if(s) document.getElementById('user-status').innerText = s;
+        }
+
+        function voyeFoto() {
+            let f = document.getElementById('fileInput').files[0];
+            let formData = new FormData();
+            formData.append('photo', f);
+            fetch('/upload-photo', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => { if(data.success) alert("Foto a voye!"); });
+        }
+
+        // Mizajou foto yo chak 3 segonn
+        setInterval(() => {
+            fetch('/get-data')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('photo-container').innerHTML = 
+                    data.photos.map(p => `<img src="/static/uploads/${p}">`).join('');
+            });
+        }, 3000);
+    </script>
 </body>
 </html>
-<button onclick="ajePwen()">Gade Videyo (+10 Pwen)</button><script>
-function ajePwen() {
-    fetch('/gade-piblisite', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ username: "ProUser" })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            document.getElementById('pwen-valeur').innerText = data.nouvo_balans;
-        }
-    });
-}
-</script>
