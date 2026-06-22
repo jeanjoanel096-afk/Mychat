@@ -1,31 +1,22 @@
-from flask import Flask, render_template, request, jsonify
-import os
+# main.py
+class MyChatLogic:
+    def __init__(self):
+        self.points_per_dollar = 25 
+        self.min_withdrawal_usd = 10
+        self.min_points_needed = self.min_withdrawal_usd * self.points_per_dollar
 
-app = Flask(__name__)
-UPLOAD_FOLDER = 'static/uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    def calculate_withdrawal(self, user_points):
+        """Kalkile si itilizatè a ka retire lajan"""
+        if user_points >= self.min_points_needed:
+            amount = user_points / self.points_per_dollar
+            return f"Ou ka retire {amount}$"
+        return f"Ou bezwen {self.min_points_needed} pwen pou 10$."
 
-# Baz done pou estati ak foto
-db = {"status": "Aktif", "photos": []}
+    def validate_moncash(self, number):
+        """Validasyon senp pou nimewo MonCash"""
+        return len(number) == 8 and number.isdigit()
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/upload-photo', methods=['POST'])
-def upload_photo():
-    if 'photo' in request.files:
-        file = request.files['photo']
-        if file:
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-            db['photos'].append(file.filename)
-            return jsonify({"success": True})
-    return jsonify({"success": False})
-
-@app.route('/get-data')
-def get_data():
-    return jsonify(db)
-
-if __name__ == '__main__':
-    if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
-    app.run(host='0.0.0.0', port=10000)
+# Egzanp Lojik
+mychat = MyChatLogic()
+# Moun nan gen 300 pwen
+print(mychat.calculate_withdrawal(300))
