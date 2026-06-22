@@ -1,28 +1,19 @@
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
-users_db = {}
+# Yon ti baz done pou kòmanse
+users_db = {"test@test.com": {"username": "ProUser", "pwen": 100, "moncash": "50900000000"}}
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    # Menm si itilizatè a pa konekte, li voye done vid pou pa gen "Internal Server Error"
+    return render_template('index.html', user={"pwen": 0, "username": "Guest"}, logged_in=False)
 
-@app.route('/register', methods=['POST'])
-def register():
+@app.route('/login', methods=['POST'])
+def login():
     data = request.json
-    email, username = data.get('email'), data.get('username')
-    users_db[email] = {"username": username, "pwen": 0}
-    return jsonify({"success": True, "username": username, "pwen": 0})
-
-@app.route('/gade-piblisite', methods=['POST'])
-def gade():
-    data = request.json
-    username = data.get('username')
-    for email in users_db:
-        if users_db[email]['username'] == username:
-            users_db[email]['pwen'] += 10
-            return jsonify({"success": True, "nouvo_balans": users_db[email]['pwen']})
-    return jsonify({"success": False})
+    # Lojik login la...
+    return jsonify({"success": True, "message": "Konekte!", "pwen": 100})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
