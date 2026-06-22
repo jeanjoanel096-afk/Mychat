@@ -132,6 +132,7 @@ def update_settings():
             return jsonify({"success": True, "message": "Reglaj yo ajou!"})
 
     return jsonify({"success": False, "message": "Erè nan mizajou"})
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
