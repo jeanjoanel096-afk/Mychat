@@ -1,19 +1,18 @@
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
-# Yon ti baz done pou kòmanse
-users_db = {"test@test.com": {"username": "ProUser", "pwen": 100, "moncash": "50900000000"}}
+
+# Baz done senp pou tès
+user_data = {"username": "ProUser", "pwen": 0}
 
 @app.route('/')
 def home():
-    # Menm si itilizatè a pa konekte, li voye done vid pou pa gen "Internal Server Error"
-    return render_template('index.html', user={"pwen": 0, "username": "Guest"}, logged_in=False)
+    return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.json
-    # Lojik login la...
-    return jsonify({"success": True, "message": "Konekte!", "pwen": 100})
+@app.route('/gade-piblisite', methods=['POST'])
+def gade_piblisite():
+    user_data['pwen'] += 10 # Ajoute 10 pwen
+    return jsonify({"success": True, "nouvo_balans": user_data['pwen']})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
