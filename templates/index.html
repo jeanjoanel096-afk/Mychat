@@ -64,6 +64,23 @@
         <button class="bg-purple-600 p-4 rounded-full shadow-lg"><i class="fas fa-image"></i></button>
         <button class="bg-blue-600 p-4 rounded-full shadow-lg"><i class="fas fa-comment"></i></button>
     </div>
+<div class="fixed bottom-4 right-4 flex flex-col gap-2">
+        <button class="bg-purple-600 p-4 rounded-full shadow-lg"><i class="fas fa-image"></i></button>
+        <button class="bg-blue-600 p-4 rounded-full shadow-lg"><i class="fas fa-comment"></i></button>
+    </div>
 
+    <script>
+        document.querySelector('#signup-screen button').addEventListener('click', function() {
+            const inputs = document.querySelectorAll('#signup-screen input');
+            if(inputs[0].value !== "" && inputs[1].value !== "") {
+                alert('Mèsi ' + inputs[0].value + '! Kont ou an anrejistre.');
+                document.getElementById('signup-screen').style.display = 'none';
+            } else {
+                alert('Tanpri ranpli tout bwat yo!');
+            }
+        });
+    </script>
+</body>
+</html>
 </body>
 </html>
